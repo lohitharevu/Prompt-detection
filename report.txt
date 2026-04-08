@@ -1,0 +1,156 @@
+Malicious Prompt Detection Hackathon Report
+
+--------------------------------------------
+1. Introduction
+--------------------------------------------
+With the rapid growth of AI systems, especially large language models, there is an increasing risk of prompt injection attacks. Malicious users may craft inputs that manipulate or override the intended behavior of AI systems.
+
+The objective of this project is to build a robust machine learning model that can accurately classify prompts as either:
+0 → Benign (Safe)
+1 → Malicious (Harmful)
+
+The focus is on creating a system that is both accurate and robust against adversarial inputs.
+
+--------------------------------------------
+2. Dataset Description
+--------------------------------------------
+The dataset used is the MPDD (Malicious Prompt Detection Dataset), which contains labeled prompts categorized into malicious and benign classes.
+
+Each data point consists of:
+- Prompt text (input)
+- Label (0 or 1)
+
+The dataset is balanced, which helps in training a fair and unbiased model.
+
+--------------------------------------------
+3. Data Preprocessing
+--------------------------------------------
+To prepare the data for modeling, the following preprocessing steps were applied:
+
+1. Converted all text to lowercase to ensure uniformity
+2. Removed punctuation and special characters
+3. Removed stopwords using NLTK (common words like "the", "is", etc.)
+4. Cleaned text to reduce noise and improve feature quality
+
+These steps help improve model performance by focusing only on meaningful information.
+
+--------------------------------------------
+4. Feature Engineering
+--------------------------------------------
+A hybrid feature engineering approach was used to capture different aspects of the text.
+
+4.1 Text-Based Features
+- Word-level TF-IDF:
+  Captures semantic meaning and important words in the prompt
+
+- Character-level TF-IDF:
+  Captures patterns at the character level
+  Helps detect obfuscated malicious inputs like:
+  "d3l3t3 syst3m" instead of "delete system"
+
+4.2 Statistical Features
+The following numerical features were extracted:
+- Character count
+- Word count
+- Number of unique words
+- Number of uppercase letters
+- Number of digits
+
+These features help identify unusual patterns in malicious prompts.
+
+4.3 Suspicious Keyword Detection
+A custom feature was created to detect the presence of suspicious words such as:
+"ignore", "bypass", "hack", "delete", "override"
+
+This improves the model’s ability to detect intentional attacks.
+
+--------------------------------------------
+5. Feature Combination
+--------------------------------------------
+All features (TF-IDF + statistical + keyword features) were combined into a single feature matrix.
+
+This ensures the model has access to both:
+- Linguistic patterns
+- Structural characteristics of the text
+
+--------------------------------------------
+6. Model Selection and Training
+--------------------------------------------
+Two machine learning models were used:
+
+1. Logistic Regression
+2. Support Vector Machine (Linear SVM)
+
+These models were chosen because:
+- They perform well on high-dimensional text data
+- They are efficient and interpretable
+
+Multinomial Naive Bayes was initially considered but removed due to incompatibility with scaled features and lower performance.
+
+--------------------------------------------
+7. Ensemble Approach
+--------------------------------------------
+To improve performance, an ensemble approach was used.
+
+Predictions from Logistic Regression and SVM were combined using voting.
+
+This improves:
+- Stability
+- Generalization
+- Overall F1 Score
+
+--------------------------------------------
+8. Evaluation Metrics
+--------------------------------------------
+The model was evaluated using the following metrics:
+
+- Accuracy
+- Precision
+- Recall
+- F1 Score
+- Confusion Matrix
+
+F1 Score is the primary metric, as it balances precision and recall, which is critical for detecting malicious prompts without too many false positives.
+
+--------------------------------------------
+9. Results and Performance
+--------------------------------------------
+The final model achieved strong performance with balanced precision and recall.
+
+Key observations:
+- Character-level TF-IDF significantly improved detection of adversarial inputs
+- Ensemble learning improved consistency and robustness
+- Feature engineering played a major role in improving accuracy
+
+--------------------------------------------
+10. Error Analysis
+--------------------------------------------
+Misclassified samples were analyzed to understand model limitations.
+
+Some errors occurred due to:
+- Ambiguous prompts
+- Very short text inputs
+- Complex phrasing
+
+This analysis helps identify areas for improvement.
+
+--------------------------------------------
+11. Conclusion
+--------------------------------------------
+This project successfully developed a robust machine learning pipeline for detecting malicious prompts.
+
+The combination of:
+- Advanced feature engineering
+- TF-IDF representations
+- Ensemble learning
+
+resulted in a strong and reliable model.
+
+--------------------------------------------
+12. Future Improvements
+--------------------------------------------
+Possible improvements include:
+- Hyperparameter tuning for better performance
+- Using transformer-based models (BERT, RoBERTa)
+- Real-time deployment for AI safety systems
+- More advanced adversarial detection techniques
